@@ -5,7 +5,7 @@ const prixTable = [];
 let quantiteTotal = []
 
 // gestion du panier
- async function affichagePanier() {
+async function affichagePanier() {
    
     if (panier) {   
         await panier;
@@ -14,15 +14,12 @@ let quantiteTotal = []
            
 
             const panierItems = document.getElementById("cart__items");
-           /* panierItems.dataset.id = panier[i]._id
-            panierItems.dataset.color = panier[i].couleur*/
-
 
             const article = document.createElement("article");
             article.dataset.id = panier[i]._id
             article.dataset.color = panier[i].couleur
             article.classList = "cart__item"
-           // article.innerHTML = `<article class="cart__item" data-id="${panier[i]._id}" data-color="${panier[i].couleur}"><article>`
+           
             const imageContener = document.createElement("div");
             imageContener.classList.add("cart__item__img");
 
@@ -123,8 +120,6 @@ let quantiteTotal = []
                     // total du panier
                     let grandTotal = document.querySelector("#totalPrice");
 
-                    grandTotal.innerText = `${totalFinal}`
-
                     displayTotalPrixFinal()
                 }
                 else {
@@ -149,6 +144,7 @@ let quantiteTotal = []
                     let grandTotal = document.querySelector("#totalPrice");
 
                     grandTotal.innerText = `${totalFinal}`
+
                     
                     
                 }
@@ -163,8 +159,7 @@ let quantiteTotal = []
             //bouton supprimer
             const contenerDelete = document.createElement("div");
             contenerDelete.classList.add("cart__item__content__settings__delete")
-           /* contenerDelete.innerHTML = `<div class="cart__item__content__settings__delete">
-            </div>`*/
+           
             const btnDelete = document.createElement("p");
            // btnDelete.classList.add("deleteItem")  
            // btnDelete.dataset.id = panier[i]._id
@@ -175,7 +170,6 @@ let quantiteTotal = []
             contenerQuantityInput.appendChild(contenerDelete);
             contenerInfoProduct.appendChild(contenerQuantityInput);
 
-            
             ///////////////////////////////////////////////////////////////////////////////
             let listBtnDelete = document.querySelectorAll(".deleteItem");
             function deleteProduct() {
@@ -185,6 +179,7 @@ let quantiteTotal = []
 
                     if(listBtnDelete[btn].dataset.id == panier[i]._id && 
                         listBtnDelete[btn].dataset.color == panier[i].couleur) {
+
                             listBtnDelete[btn].addEventListener("click", function(){
                                 let btnDelete = panier.filter(produit => produit._id != listBtnDelete[btn].dataset.id &&
                                 produit.couleur != listBtnDelete[btn].dataset.color);
@@ -192,7 +187,6 @@ let quantiteTotal = []
                                 panier[i].quantity = 0
                                 input.value = panier[i].quantity
                                    
-                                console.log(input.value + " " + "valeur input")
                                 ///////////////////////////////////////////////////////
                                     //traitement du nouveau prix total
                                    
@@ -209,31 +203,31 @@ let quantiteTotal = []
                                             let grandTotal = document.querySelector("#totalPrice");
                         
                                             grandTotal.innerText = `${totalFinal}`
-                                            console.log(grandTotal.innerText = `${totalFinal}` + " " + "prix total")
                                             
                                         }
+
                                          //soustraction
+                                
                                         for(let j = 0; j < sousTotalPrix.length; j++) {
                                             const sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
 
                                             if(listBtnDelete[btn].dataset.id == sousTotalPrix[j].dataset.id && 
                                                 listBtnDelete[btn].dataset.color == sousTotalPrix[j].dataset.color ) {
                                                     
-                                                    totalFinal -= sousTotalPrixChaineCaractère 
+                                                totalFinal -= sousTotalPrixChaineCaractère 
 
-                                                    let grandTotal = document.querySelector("#totalPrice");
+                                                let grandTotal = document.querySelector("#totalPrice");
 
-                                                    grandTotal.innerText = totalFinal
-
-                                                    console.log(grandTotal.innerText = `${totalFinal}` + " " + "prix total")
-                                                }
+                                                grandTotal.innerText = totalFinal
+                                                // masqueFormulaire()
+                                                                
+                                            }
+                                           
                                         }
                                    
-                                        
-                                /////////////////////////////////////////////////////////
-                                //masquage du produit retiré au panier
-                                
-
+                                        hiddenBasket()
+                                       // masqueFormulaire()
+                                 
                                 localStorage.setItem("produit", JSON.stringify(panier))
                                return JSON.parse(localStorage.getItem("produit"))
                                     
@@ -244,101 +238,58 @@ let quantiteTotal = []
                 
             }
             deleteProduct()
-        
-                                
-                /////////////////////////////////////////////////////
-                //soustraction
-              /*  function soustraction(){
-                        let sousTotalPrix = document.querySelectorAll(".sousTotalPrix");
-                            
-                        let totalFinal = 0
-                        let tableauPrixSousTotal = []
-                        for(let j = 0; j < sousTotalPrix.length; j++) {
-                            const sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
-                            
-                            tableauPrixSousTotal.push(sousTotalPrixChaineCaractère)
-                            totalFinal += tableauPrixSousTotal[j]
-                            let grandTotal = document.querySelector("#totalPrice");
-        
-                            grandTotal.innerText = `${totalFinal}`
-                            console.log(grandTotal.innerText = `${totalFinal}` + " " + "prix total")
-                            
-                        }
-                            //soustraction
-                        for(let j = 0; j < sousTotalPrix.length; j++) {
-                            const sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
+           
 
-                            if(listBtnDelete[btn].dataset.id == sousTotalPrix[j].dataset.id && 
-                                listBtnDelete[btn].dataset.color == sousTotalPrix[j].dataset.color ) {
-                                    
-                                    totalFinal -= sousTotalPrixChaineCaractère 
-
-                                    let grandTotal = document.querySelector("#totalPrice");
-
-                                    grandTotal.innerText = totalFinal
-
-                                    console.log(grandTotal.innerText = `${totalFinal}` + " " + "prix total")
-                                }
-                        }
-                    }
-
-
-                */
-                
-                /////////////////////////////////////////////////////
-                
-                               
-             /*    
-                
-             }
-
-             supprimer()
-            
-
-            ///////////////////////////////////////////////////////////////////////////////           
+            ///////////////////////////////////////////////////////////////////////////////  
+            //masquage du produit dont l'input est null         
             function hiddenBasket() {
             
-                const articleBasket = document.querySelectorAll(".cart__item");
+               // const articleBasket = document.querySelectorAll(".cart__item");
                 
-                console.log(articleBasket)
-                for ( let m = 0; m < articleBasket.length; m++) {
-                    if(articleBasket[m].dataset.id == panier[i]._id &&
-                        articleBasket[m].dataset.color == panier[i].couleur) {
+              //  console.log(articleBasket)
+
+                if( panier[i].quantity == 0){
+                    const articleBasket = document.querySelectorAll(".cart__item");
+                    for ( let m = 0; m < articleBasket.length; m++) {
+                        if(articleBasket[m].dataset.id == panier[i]._id &&
+                            articleBasket[m].dataset.color == panier[i].couleur ) {
                             console.log("masquer panier")
                             console.log(articleBasket[m])
-                            //articleBasket[m].style.backgroundColor = "red"
-                           articleBasket[m].style.display = "none"
+                            articleBasket[m].style.display = "none"
                             
                         }
+                        masqueFormulaire()
+                    }
+               /* for ( let m = 0; m < articleBasket.length; m++) {
+                    if(articleBasket[m].dataset.id == panier[i]._id &&
+                        articleBasket[m].dataset.color == panier[i].couleur ) {
+                            console.log("masquer panier")
+                            console.log(articleBasket[m])
+                           articleBasket[m].style.display = "none"
+                            
+                    }*/
                 }
                
+               
             }
-            */
+            hiddenBasket()
+
            ////////////////////////////////////////////////
            
            //masquage du formulaire
            function masqueFormulaire() {
             
-            quantiteTotal.push(panier[i].quantity)
-        
-            let valeurQuantiteTotal = 0
-            let valeurMasqueFormulaire = 0
-            for(let q = 0; q < quantiteTotal.length; q++){
-                valeurQuantiteTotal += quantiteTotal[q] 
-               // console.log(valeurQuantiteTotal)
-            }
-             if(valeurQuantiteTotal == valeurMasqueFormulaire ){
-                    const blockFormulaire = document.querySelector(".cart__order");
-                    blockFormulaire.style.display = "none"
+                let grandTotal = document.querySelector("#totalPrice");
+                console.log( grandTotal.innerText + " " + "mon grand total tes")
+                if(grandTotal.innerText == 0){
+                const blockFormulaire = document.querySelector(".cart__order");
+                blockFormulaire.style.display = "none"
                 }
             }
-            
-            masqueFormulaire()
 
-           ////////////////////////////////////////////////
+            masqueFormulaire()
           
         }
-       
         
     } 
 }
@@ -347,6 +298,9 @@ affichagePanier()
 
 
 //validation forfulaire 
+
+/*
+
 
 /////////////////////////////////////////////////
 
@@ -439,7 +393,7 @@ commander.addEventListener("click", function(even){
     emailValidation()
     //validationFormulaire()
 })
-
+*/
 
 /*
 function validationForm(){
@@ -499,5 +453,6 @@ function validationForm(){
             }
        
     }
+    
 }
 */
