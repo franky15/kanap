@@ -53,7 +53,7 @@ async function affichagePanier() {
             displaySousTotal.classList.add("sousTotalPrix");
             displaySousTotal.dataset.id = panier[i]._id;
             displaySousTotal.dataset.color = panier[i].couleur;
-            let takeQuantity = `${panier[i].price}`;
+           // let takeQuantity = `${panier[i].price}`;
 
 
             displaySousTotal.innerText = `${panier[i].price}` * `${panier[i].quantity}` + "€";//* `${panier[i].quantity}`
@@ -78,19 +78,19 @@ async function affichagePanier() {
             input.type = "number";
             input.classList.add("itemQuantity");
             input.name = "itemQuantity";
-            input.min = "1";
+            input.min = "0"; 
             input.max = "100"
 
             input.addEventListener("input", function(even){
                 valInput = even.target.value;
                 newQuantity = parseInt(valInput)
 
-                if(valInput >= 1 && valInput < 100) {
+                if(valInput >= 0 && valInput < 100) {
                    
                      panier[i].quantity = newQuantity
-                     displaySousTotal.innerText = `${panier[i].price}` * valInput + "€" //`${panier[i].quantity}`
+                     displaySousTotal.innerText = panier[i].price * valInput + "€" //`${panier[i].quantity}`
 
-                     localStorage.setItem("produit", JSON.stringify(panier));
+                     localStorage.setItem("produit", JSON.stringify(panier)); /////
                      
                      // total du panier
                     let sousTotalPrix = document.querySelectorAll(".sousTotalPrix");
@@ -143,9 +143,8 @@ async function affichagePanier() {
                     totalFinal += tableauPrixSousTotal[j]
                     let grandTotal = document.querySelector("#totalPrice");
 
-                    grandTotal.innerText = `${totalFinal}`
+                    grandTotal.innerText =  totalFinal //`${totalFinal}`
 
-                    
                     
                 }
              }
@@ -161,9 +160,6 @@ async function affichagePanier() {
             contenerDelete.classList.add("cart__item__content__settings__delete")
            
             const btnDelete = document.createElement("p");
-           // btnDelete.classList.add("deleteItem")  
-           // btnDelete.dataset.id = panier[i]._id
-           // btnDelete.dataset.color = panier[i].couleur
 
             btnDelete.innerHTML = `<p class="deleteItem" data-id="${panier[i]._id}" data-color="${panier[i].couleur}">Supprimer</p>`
             contenerDelete.appendChild(btnDelete);
@@ -171,65 +167,24 @@ async function affichagePanier() {
             contenerInfoProduct.appendChild(contenerQuantityInput);
 
             ///////////////////////////////////////////////////////////////////////////////
-            let listBtnDelete = document.querySelectorAll(".deleteItem");
+           // let listBtnDelete = document.querySelectorAll(".deleteItem");
             function deleteProduct() {
                
-               // let listBtnDelete = document.querySelectorAll(".deleteItem");
+                let listBtnDelete = document.querySelectorAll(".deleteItem");
                 for(let btn = 0; btn < listBtnDelete.length; btn++){
 
                     if(listBtnDelete[btn].dataset.id == panier[i]._id && 
                         listBtnDelete[btn].dataset.color == panier[i].couleur) {
 
                             listBtnDelete[btn].addEventListener("click", function(){
-                                let btnDelete = panier.filter(produit => produit._id != listBtnDelete[btn].dataset.id &&
-                                produit.couleur != listBtnDelete[btn].dataset.color);
-                                console.log(btnDelete + " " + "filtre")
-                                panier[i].quantity = 0
-                                input.value = panier[i].quantity
-                                   
-                                ///////////////////////////////////////////////////////
-                                    //traitement du nouveau prix total
-                                   
-                                   
-                                       let sousTotalPrix = document.querySelectorAll(".sousTotalPrix");
-                                            
-                                        let totalFinal = 0
-                                        let tableauPrixSousTotal = []
-                                        for(let j = 0; j < sousTotalPrix.length; j++) {
-                                            const sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
-                                            
-                                            tableauPrixSousTotal.push(sousTotalPrixChaineCaractère)
-                                            totalFinal += tableauPrixSousTotal[j]
-                                            let grandTotal = document.querySelector("#totalPrice");
-                        
-                                            grandTotal.innerText = `${totalFinal}`
-                                            
-                                        }
 
-                                         //soustraction
+
                                 
-                                        for(let j = 0; j < sousTotalPrix.length; j++) {
-                                            const sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
-
-                                            if(listBtnDelete[btn].dataset.id == sousTotalPrix[j].dataset.id && 
-                                                listBtnDelete[btn].dataset.color == sousTotalPrix[j].dataset.color ) {
-                                                    
-                                                totalFinal -= sousTotalPrixChaineCaractère 
-
-                                                let grandTotal = document.querySelector("#totalPrice");
-
-                                                grandTotal.innerText = totalFinal
-                                                // masqueFormulaire()
-                                                                
-                                            }
-                                           
-                                        }
-                                   
-                                        hiddenBasket()
-                                       // masqueFormulaire()
-                                 
-                                localStorage.setItem("produit", JSON.stringify(panier))
-                               return JSON.parse(localStorage.getItem("produit"))
+                                
+                                soustraction()
+                                displayTotalPrixFinal()
+                                hiddenBasket()
+                                masqueFormulaire()
                                     
                             })
                     }
@@ -238,15 +193,20 @@ async function affichagePanier() {
                 
             }
             deleteProduct()
-           
+          
+            function soustraction(){
+                panier[i].quantity = 0
+                localStorage.setItem("produit", JSON.stringify(panier))
+                JSON.parse(localStorage.getItem("produit")),
+
+                input.value = panier[i].quantity,
+                displaySousTotal.innerText = `${panier[i].price}` * `${panier[i].quantity}` + "€";
+
+            }
 
             ///////////////////////////////////////////////////////////////////////////////  
             //masquage du produit dont l'input est null         
             function hiddenBasket() {
-            
-               // const articleBasket = document.querySelectorAll(".cart__item");
-                
-              //  console.log(articleBasket)
 
                 if( panier[i].quantity == 0){
                     const articleBasket = document.querySelectorAll(".cart__item");
@@ -258,16 +218,9 @@ async function affichagePanier() {
                             articleBasket[m].style.display = "none"
                             
                         }
-                        masqueFormulaire()
+                       
                     }
-               /* for ( let m = 0; m < articleBasket.length; m++) {
-                    if(articleBasket[m].dataset.id == panier[i]._id &&
-                        articleBasket[m].dataset.color == panier[i].couleur ) {
-                            console.log("masquer panier")
-                            console.log(articleBasket[m])
-                           articleBasket[m].style.display = "none"
-                            
-                    }*/
+               
                 }
                
                
@@ -276,17 +229,30 @@ async function affichagePanier() {
 
            ////////////////////////////////////////////////
            
+           
            //masquage du formulaire
            function masqueFormulaire() {
-            
-                let grandTotal = document.querySelector("#totalPrice");
-                console.log( grandTotal.innerText + " " + "mon grand total tes")
+               
+            let sousTotalPrix = document.querySelectorAll(".sousTotalPrix");
+            let grandTotal = document.querySelector("#totalPrice");
+                    
+            let totalFinal = 0
+            for(let j = 0; j < sousTotalPrix.length; j++) {
+                let sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
+
+                console.log(sousTotalPrixChaineCaractère + " " + "sous total prix chaine")
+
+                totalFinal += sousTotalPrixChaineCaractère 
+
+                grandTotal.innerText =  totalFinal //`${totalFinal}`
+                console.log(totalFinal + " " + "total final")
+                
+            }
                 if(grandTotal.innerText == 0){
                 const blockFormulaire = document.querySelector(".cart__order");
                 blockFormulaire.style.display = "none"
                 }
             }
-
             masqueFormulaire()
           
         }
@@ -299,67 +265,101 @@ affichagePanier()
 
 //validation forfulaire 
 
-/*
-
-
 /////////////////////////////////////////////////
+
+let commander = document.querySelector("#order")
 
 function firstNameValidation() {
 
     //validation nom 
-    const firstName = document.querySelector("#firstName");
-    const alerteFirstname = document.querySelector("#firstNameErrorMsg")
-    
-    var firstNameNameReg = new RegExp(/^[a-zA-Z- ]{1,100}$/)
-    var firstNameNameTest = firstName.value
-    if(!firstNameNameTest.match(firstNameNameReg)) {
-        alerteFirstname.style.display = "block"
-        alerteFirstname.innerText = "votre prénom doit contenir que des lettres et au maximum 100 "
-    }
+    var firstName = document.querySelector("#firstName");
+    var alertFirstname = document.querySelector("#firstNameErrorMsg")
+
+    var firstNameReg = new RegExp(/^[a-zA-Z- ]{1,100}$/)
+    var firstNameTest = " ";
+
+  /*  firstName.focus(
+        firstNameTest = even.target.value
+        if(!firstNameTest.match(firstNameReg)) {
+            alertFirstname.style.display = "block"
+            alertFirstname.innerText = "votre prénom doit contenir que des lettres et au maximum 100 "
+            commander.style.display = "none"
+        }
+    )*/
+
+    firstName.addEventListener("change", function(even){
+        firstNameTest = even.target.value
+        if(!firstNameTest.match(firstNameReg)) {
+            alertFirstname.style.display = "block"
+            alertFirstname.innerText = "votre prénom doit contenir que des lettres et au maximum 100 "
+            commander.style.display = "none"
+        }
+    })
+   
 }
+firstNameValidation()
 
 function lastNameValidation(){
 
     //validation prénom
-    const lastName = document.querySelector("#lastName");
-    const alertlastName = document.querySelector("#flastNameErrorMsg")
+    var lastName = document.querySelector("#lastName");
+    var alertlastName = document.querySelector("#flastNameErrorMsg")
 
     var lastNameReg = new RegExp(/^[a-zA-Z- ]{1,100}$/)
-    var lastNameTest = lastName.value
-    if(!lastNameTest.match(lastNameReg)) {
-        alertlastName.style.display = "block"
-        alertlastName.innerText= "votre Nom doit contenir que des lettres et au maximum 100 "
-    }
+    var lastNameTest = " ";
+
+    lastName.addEventListener("input", function(even){
+        lastNameTest = even.target.value;
+        if(!lastNameTest.match(lastNameReg)) {
+            alertlastName.style.display = "block"
+            alertlastName.innerText= "votre Nom doit contenir que des lettres et au maximum 100 "
+            commander.style.display = "none"
+        }
+    })
+    
 }
+lastNameValidation()
 
 function adresse(){
 
     //validation adresse
-    const adresse = document.querySelector("#address");
-    const alertadresse = document.querySelector("#addressErrorMsg")
+    var adresse = document.querySelector("#address");
+    var alertadresse = document.querySelector("#addressErrorMsg")
 
     var adresseReg = new RegExp(/^[0-9]{1,5}[[a-zA-Z- ]{1,100}$/)
-    var adresseTest = adresse.value
-    if(!adresseTest.match(adresseReg)) {
-        adresse.style.display = "block"
-        alertadresse.innerText = "votre code postal doit contenir que des chiffres et au maximum 10 chiffres "
-    }
+    var adresseTest = " ";
+
+    adresse.addEventListener("input", function(even){
+       adresseTest =  even.target.value;
+       if(!adresseTest.match(adresseReg)) {
+            alertadresse.style.display = "block"
+            alertadresse.innerText = "votre code postal doit contenir que des chiffres et au maximum 10 chiffres "
+            commander.style.display = "none"
+         }
+    })
+   
 }
+adresse()
 
 function city(){
 
     //validation ville
-    const city = document.querySelector("#city");
-    const alertCity = document.querySelector("#cityErrorMsg")
+    var city = document.querySelector("#city");
+    var alertCity = document.querySelector("#cityErrorMsg")
 
     var cityReg = new RegExp(/^[[a-zA-Z-]{1,50}$/)
-    var cityTest = city.value
-    if(!cityTest.match(cityReg)) {
-        city.style.display = "block"
-        alertCity.innerText = "votre code postal doit contenir que des chiffres et au maximum 10 chiffres "
-    }
+    var cityTest = " ";
+    city.addEventListener("input", function(even){
+       cityTest = even.target.value
+        if(!cityTest.match(cityReg)) {
+            alertCity.style.display = "block"
+            alertCity.innerText = "votre code postal doit contenir que des chiffres et au maximum 10 chiffres "
+            commander.style.display = "none"
+        }
+    })
+    
 }
-
+city()
     
 function emailValidation() {
    
@@ -367,23 +367,30 @@ function emailValidation() {
     var email = document.querySelector("#email");
     var alerteEmail = document.querySelector("#emailErrorMsg");
 
-    var emailTest = email.value;
     var emailReg = new RegExp(/^[a-zA-Z0-9._-]{1,64}@[a-zA-Z0-9-]{1,252}[a-zA-Z.]{2,6}$/);
-    if (!emailTest.match(emailReg )) {
-        alerteEmail.style.display = "block"
-        alerteEmail.innerText = "votre email ne respecte pas les normes "
-    }
+    var emailTest = " ";
+    email.addEventListener("input", function(even){
+        emailTest = even.target.value;
+        if (!emailTest.match(emailReg )) {
+            alerteEmail.style.display = "block"
+            alerteEmail.innerText = "votre email ne respecte pas les normes "
+            commander.style.display = "none"
+
+        }
+    })
+   
 }
+emailValidation()
 
 //Lien vers la page de confirmation
 function validationFormulaire() {
-    const formulaire = document.querySelector(".cart__order__form");
+    var formulaire = document.querySelector(".cart__order__form");
     formulaire.action = "./confirmation.html"
 }
 
 
 
-const commander = document.querySelector("#order")
+
 commander.addEventListener("click", function(even){
     even.preventDefault()
     firstNameValidation()
@@ -391,9 +398,9 @@ commander.addEventListener("click", function(even){
     adresse()
     city()
     emailValidation()
-    //validationFormulaire()
+    validationFormulaire()
 })
-*/
+
 
 /*
 function validationForm(){
@@ -432,7 +439,7 @@ function validationForm(){
                 const alerteEmail = document.querySelector("#emailErrorMsg");
                 const emailTest = email.value;
                 var emailReg = new RegExp(/^[a-zA-Z0-9._-]{1,64}@([a-zA-Z0-9-]{2,252}\.[a-zA-Z.]{2,6}){5,255}/);
-                var emailTest = email.value;
+                
                 if (!inputUser.match(emailReg )) {
                     //return false
                     alerteEmail.style.display = "block"
@@ -442,12 +449,12 @@ function validationForm(){
                     //Lien vers la page de confirmation
                     function validationFormulaire() {
                         const formulaire = document.querySelector(".cart__order__form");
-                        formulaire.action = "./confirmation.html"
+                       // formulaire.action = "./confirmation.html"
                     }
                     const commander = document.querySelector("#order")
                     commander.addEventListener("click", function(){
     
-                        validationForm()
+                        validationFormulaire()
                     })
                 }
             }
@@ -455,4 +462,5 @@ function validationForm(){
     }
     
 }
-*/
+}*/
+
