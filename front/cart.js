@@ -103,11 +103,9 @@ async function affichagePanier() {
                         tableauPrixSousTotal.push(sousTotalPrixChaineCaractère)
                         totalFinal += tableauPrixSousTotal[j]
 
-                        console.log( totalFinal + " " + "avant")
-
                         for (let y = 0; y < tableauPrixSousTotal.length; y++) {
                             totalFinal += tableauPrixSousTotal[y]
-                            console.log( totalFinal + " " + "apres")
+                        
                             // total du panier
                             let grandTotal = document.querySelector("#totalPrice");
 
@@ -213,8 +211,7 @@ async function affichagePanier() {
                     for ( let m = 0; m < articleBasket.length; m++) {
                         if(articleBasket[m].dataset.id == panier[i]._id &&
                             articleBasket[m].dataset.color == panier[i].couleur ) {
-                            console.log("masquer panier")
-                            console.log(articleBasket[m])
+                        
                             articleBasket[m].style.display = "none"
                             
                         }
@@ -240,12 +237,9 @@ async function affichagePanier() {
             for(let j = 0; j < sousTotalPrix.length; j++) {
                 let sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
 
-                console.log(sousTotalPrixChaineCaractère + " " + "sous total prix chaine")
-
                 totalFinal += sousTotalPrixChaineCaractère 
 
                 grandTotal.innerText =  totalFinal //`${totalFinal}`
-                console.log(totalFinal + " " + "total final")
                 
             }
                 if(grandTotal.innerText == 0){
@@ -261,206 +255,184 @@ async function affichagePanier() {
 }
 affichagePanier()
 
+////////////////////////////////////validation du formulaire/////////////////////////////
+let nom = document.getElementById("firstName");
+let alertNom = document.getElementById("firstNameErrorMsg");
+
+let prenom = document.getElementById("lastName");
+let alertPrenom = document.getElementById("lastNameErrorMsg");
+
+let adresse = document.getElementById("address");
+let alertAdresse = document.getElementById("addressErrorMsg");
+
+let ville = document.getElementById("city");
+let alertVille = document.getElementById("cityErrorMsg");
+
+let email = document.getElementById("email");
+let alertEmail = document.getElementById("emailErrorMsg");
+
+let formulaire = document.getElementById("cart__order__form")
 
 
-//validation forfulaire 
-
-/////////////////////////////////////////////////
-
-let commander = document.querySelector("#order")
-
-function firstNameValidation() {
-
-    //validation nom 
-    var firstName = document.querySelector("#firstName");
-    var alertFirstname = document.querySelector("#firstNameErrorMsg")
-
-    var firstNameReg = new RegExp(/^[a-zA-Z- ]{1,100}$/)
-    var firstNameTest = " ";
-
-  /*  firstName.focus(
-        firstNameTest = even.target.value
-        if(!firstNameTest.match(firstNameReg)) {
-            alertFirstname.style.display = "block"
-            alertFirstname.innerText = "votre prénom doit contenir que des lettres et au maximum 100 "
-            commander.style.display = "none"
-        }
-    )*/
-
-    firstName.addEventListener("change", function(even){
-        firstNameTest = even.target.value
-        if(!firstNameTest.match(firstNameReg)) {
-            alertFirstname.style.display = "block"
-            alertFirstname.innerText = "votre prénom doit contenir que des lettres et au maximum 100 "
-            commander.style.display = "none"
-        }
-    })
-   
-}
-firstNameValidation()
-
-function lastNameValidation(){
-
-    //validation prénom
-    var lastName = document.querySelector("#lastName");
-    var alertlastName = document.querySelector("#flastNameErrorMsg")
-
-    var lastNameReg = new RegExp(/^[a-zA-Z- ]{1,100}$/)
-    var lastNameTest = " ";
-
-    lastName.addEventListener("input", function(even){
-        lastNameTest = even.target.value;
-        if(!lastNameTest.match(lastNameReg)) {
-            alertlastName.style.display = "block"
-            alertlastName.innerText= "votre Nom doit contenir que des lettres et au maximum 100 "
-            commander.style.display = "none"
-        }
-    })
-    
-}
-lastNameValidation()
-
-function adresse(){
-
-    //validation adresse
-    var adresse = document.querySelector("#address");
-    var alertadresse = document.querySelector("#addressErrorMsg")
-
-    var adresseReg = new RegExp(/^[0-9]{1,5}[[a-zA-Z- ]{1,100}$/)
-    var adresseTest = " ";
-
-    adresse.addEventListener("input", function(even){
-       adresseTest =  even.target.value;
-       if(!adresseTest.match(adresseReg)) {
-            alertadresse.style.display = "block"
-            alertadresse.innerText = "votre code postal doit contenir que des chiffres et au maximum 10 chiffres "
-            commander.style.display = "none"
-         }
-    })
-   
-}
-adresse()
-
-function city(){
-
-    //validation ville
-    var city = document.querySelector("#city");
-    var alertCity = document.querySelector("#cityErrorMsg")
-
-    var cityReg = new RegExp(/^[[a-zA-Z-]{1,50}$/)
-    var cityTest = " ";
-    city.addEventListener("input", function(even){
-       cityTest = even.target.value
-        if(!cityTest.match(cityReg)) {
-            alertCity.style.display = "block"
-            alertCity.innerText = "votre code postal doit contenir que des chiffres et au maximum 10 chiffres "
-            commander.style.display = "none"
-        }
-    })
-    
-}
-city()
-    
-function emailValidation() {
-   
-    //validation mail
-    var email = document.querySelector("#email");
-    var alerteEmail = document.querySelector("#emailErrorMsg");
-
-    var emailReg = new RegExp(/^[a-zA-Z0-9._-]{1,64}@[a-zA-Z0-9-]{1,252}[a-zA-Z.]{2,6}$/);
-    var emailTest = " ";
-    email.addEventListener("input", function(even){
-        emailTest = even.target.value;
-        if (!emailTest.match(emailReg )) {
-            alerteEmail.style.display = "block"
-            alerteEmail.innerText = "votre email ne respecte pas les normes "
-            commander.style.display = "none"
-
-        }
-    })
-   
-}
-emailValidation()
-
-//Lien vers la page de confirmation
-function validationFormulaire() {
-    var formulaire = document.querySelector(".cart__order__form");
-    formulaire.action = "./confirmation.html"
-}
+let inputNom, inputPrenom, inputAdresse, inputVille, inputEmail;
 
 
+///////////////validation du prénom //////////////////
 
+prenom.addEventListener("input", function(even) {
+    if(even.target.value == 0 || even.target.value.match(/[a-zA-Z-][0-9]/) ||  even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
+        console.log("vide");
+        alertPrenom.innerText = "votre prénom ne peut contenir de chiffres ni de caractères spéciaux";
+        inputPrenom = null
+       
+    }
+    if(even.target.value.match(/^[a-z A-Z-]{2,50}$/)) {
+        console.log(even.target.value);
+        alertPrenom.style.display = "none";
+        inputPrenom = even.target.value;
+       
+    }else {
+        alertPrenom.innerText = "votre nom ne peut contenir au maximum 50 lettres ";
+        inputPrenom = null
+    }
+})
 
-commander.addEventListener("click", function(even){
-    even.preventDefault()
-    firstNameValidation()
-    lastNameValidation()
-    adresse()
-    city()
-    emailValidation()
-    validationFormulaire()
+///////////////validation du nom //////////////////
+
+nom.addEventListener("input", function(even) {
+    if(even.target.value == 0 || even.target.value.match(/[a-zA-Z-][0-9]/) ||  even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
+        console.log("vide");
+        alertNom.innerText = "votre nom ne peut contenir de chiffres ni de caractères spéciaux";
+       // inputNom = null
+        inputNom = null
+      
+    }
+    if(even.target.value.match(/^[a-z A-Z-]{2,50}$/)) {
+        console.log(even.target.value);
+        console.log("succès");
+        alertNom.style.display = "none"
+       inputNom = even.target.value;
+      
+       
+    }else {
+        alertNom.innerText = "votre nom ne peut contenir au maximum 50 lettres ";
+        inputNom = null
+        
+    }
 })
 
 
-/*
-function validationForm(){
+///////////////validation de l'adresse //////////////////
 
-    //validation nom 
-    const firstName = document.querySelector("#firstName");
-    const alerteFirstname = document.querySelector("#firstNameErrorMsg")
-    
-    var firstNameNameReg = new RegExp(/^[a-zA-Z-]{1,100}$/)
-    var firstNameNameTest = firstName.value
-    if(!firstNameNameTest.match(firstNameNameReg)) {
-        alerteFirstname.style.display = "block"
-        alerteFirstname.innerText("votre prénom doit contenir que des lettres et au maximum 100 ")
-    }else{ 
-        //validation prénom
-        const lastName = document.querySelector("#lastName");
-        const alertlastName = document.querySelector("#flastNameErrorMsg")
-
-        var lastNameReg = new RegExp(/^[a-zA-Z-]{1,100}$/)
-        var lastNameTest = lastName.value
-        if(!lastNameTest.match(lastNameReg)) {
-            alertlastName.style.display = "block"
-            alertlastName.innerText("votre Nom doit contenir que des lettres et au maximum 100 ")
-        }else{
-            //validation ville
-            const city = document.querySelector("#city");
-            const alertCity = document.querySelector("#cityErrorMsg")
-        
-            var cityReg = new RegExp(/^[0-9]{1,10}$/)
-            var cityTest = city.value
-            if(!cityTest.match(cityReg)) {
-                alertCity.style.display = "block"
-                alertCity.innerText("votre code postal doit contenir que des chiffres et au maximum 10 chiffres ")
-            } else{
-                const email = document.querySelector("#email");
-                const alerteEmail = document.querySelector("#emailErrorMsg");
-                const emailTest = email.value;
-                var emailReg = new RegExp(/^[a-zA-Z0-9._-]{1,64}@([a-zA-Z0-9-]{2,252}\.[a-zA-Z.]{2,6}){5,255}/);
-                
-                if (!inputUser.match(emailReg )) {
-                    //return false
-                    alerteEmail.style.display = "block"
-                    alerteEmail.innerText("votre email ne respecte pas les normes ")
-                    
-                }else{
-                    //Lien vers la page de confirmation
-                    function validationFormulaire() {
-                        const formulaire = document.querySelector(".cart__order__form");
-                       // formulaire.action = "./confirmation.html"
-                    }
-                    const commander = document.querySelector("#order")
-                    commander.addEventListener("click", function(){
-    
-                        validationFormulaire()
-                    })
-                }
-            }
+adresse.addEventListener("input", function(even) {
+    if(even.target.value == 0 || even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
+        console.log("vide");
+        alertAdresse.innerText = "votre adresse ne peut contenir de chiffres ni de caractères spéciaux";
+        inputAdresse = null
        
     }
-    
-}
-}*/
+    if(even.target.value.match(/^([0-9 ]){2}([a-zA-Z ]){5,60}$/)) {
+        console.log("succès");
+        console.log(even.target.value);
+        alertAdresse.style.display = "none";
+        inputAdresse = even.target.value;
+       
+    }else {
+        alertAdresse.innerText = "votre adresse  peut contenir au maximum 60 lettres ";
+        inputAdresse = null
+    }
+})
 
+///////////////validation de la ville //////////////////
+
+ville.addEventListener("input", function(even) {
+    if(even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
+        console.log("vide");
+        alertVille.innerText = "votre ville ne peut contenir de chiffres ni de caractères spéciaux";
+        inputVille = null
+       
+    }
+    if(even.target.value.match(/^[a-zA-Z-]{2,20}$/)) {
+        console.log("succès");
+        console.log(even.target.value);
+        alertVille.style.display = "none";
+        inputVille = even.target.value;
+       
+    }else {
+        alertVille.innerText = "votre ville doit contenir au maximum 20 lettres ";
+        inputVille = null
+    }
+})
+  
+///////////////validation de l'email //////////////////
+
+
+email.addEventListener("input", function(even) {
+    
+    if(even.target.value == 0 ) {
+        console.log("vide");
+        alertEmail.innerText = "votre email ne peut être vide";
+        inputEmail = null
+       
+    }
+    if(even.target.value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) { 
+        console.log("succès");
+        console.log(even.target.value);
+        alertEmail.style.display = "none";
+        inputEmail = even.target.value;
+       
+    }else {
+        alertEmail.innerText = "votre mail doit respecter cette norme mail@domaine.com";
+        inputEmail = null
+    }
+})
+ 
+///////////////////////////envoie formulaire///////////////////////
+formulaire.addEventListener("submit", function(e){
+    e.preventDefault();
+    console.log("post stoppé")
+    if(inputNom && inputPrenom && inputAdresse && inputVille &&  inputEmail){ //&& inputEmail
+        console.log("tout est parfait on peut envoyer le formulaire");
+        let commandeFinal = JSON.parse(localStorage.getItem("produit"));
+
+        console.log(commandeFinal)
+
+        let tableauProducts = [];
+        for(let j = 0; j < commandeFinal.length; j++){
+            if(commandeFinal[j].quantity != 0){
+                tableauProducts.push(commandeFinal[j]._id)
+            }
+        }
+
+        let contact = {
+            contact : {
+                firstName : inputPrenom,
+                lastName : inputNom,
+                address: inputAdresse,
+                city: inputVille,
+                email : inputEmail
+               //product-ID: tableauProducts
+            },
+            tableauProduits: tableauProducts
+        }
+
+        console.log(contact)
+        fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            headers: { "Content-Type" : "application/json" },
+            body: JSON.stringify(contact),
+        })
+        .then(function(res){ res.json() })
+        .then(function(value){
+            let reponse = value
+            console.log("la réponse du serveur")
+            console.log(reponse)
+        });
+
+    }else{
+       
+        console.log("erreur dans les input    veillez corriger le formulaire")
+    }
+   
+    
+})
