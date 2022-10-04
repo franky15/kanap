@@ -56,38 +56,11 @@ ficheProduit();
 
 function ajouterPanier() {
     
-     ////////////////////////////////////////////////////////////////
-    /* let objectFinal = JSON.parse(localStorage.getItem("produit"));
-
-    function entre(){
-        for(i = 0; i < objectFinal.length; i++){
-            inputNumber.addEventListener("change", function(even){
-                val = even.target.value;
-                if(val > objectFinal[i].quantity) {
-                    objectFinal[i].quantity ++
-                }else if(val < objectFinal[i].quantity && val >= 0){
-                    objectFinal[i].quantity --
-                }else if ( val < 0){
-                    objectFinal[i].quantity = 0;
-                    
-                    
-                }
-                
-               return localStorage.setItem("produit", JSON.stringify(objectFinal)),
-                console.log(val)
-            })
-        }
-       
-    }
-
-    */
-    ////////////////////////////////////////////////////////////////
+   
     let select = document.getElementById("colors");
 
     let inputNumber = document.getElementById("quantity");
     
-   
-
     let btnPanier = document.getElementById("addToCart");
     btnPanier.setAttribute("id", `${produitPanier._id}`);
     btnPanier.classList.add("addToCart");
@@ -133,8 +106,6 @@ function ajouterPanier() {
                         objectFinal[i].couleur == select.value  ) {
                         
                         //////////////////////////////////////
-
-                        //let productFind = objectFinal.find((produit) => produit._id == produitPanier._id && produit.couleur == select.value );
                             let newQuantity = parseInt(objectFinal[i].quantity) + parseInt(inputNumber.value);
                             //let newPrice = parseInt(produitPanier.price) *  newQuantity;
                            

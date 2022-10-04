@@ -175,10 +175,6 @@ async function affichagePanier() {
                         listBtnDelete[btn].dataset.color == panier[i].couleur) {
 
                             listBtnDelete[btn].addEventListener("click", function(){
-
-
-                                
-                                
                                 soustraction()
                                 displayTotalPrixFinal()
                                 hiddenBasket()
@@ -220,7 +216,6 @@ async function affichagePanier() {
                
                 }
                
-               
             }
             hiddenBasket()
 
@@ -237,30 +232,33 @@ async function affichagePanier() {
             for(let j = 0; j < sousTotalPrix.length; j++) {
                 let sousTotalPrixChaineCaractère = parseInt(sousTotalPrix[j].innerText.replace("€", ""))
 
-                totalFinal += sousTotalPrixChaineCaractère 
+                totalFinal += sousTotalPrixChaineCaractère;
 
-                grandTotal.innerText =  totalFinal //`${totalFinal}`
+                grandTotal.innerText =  totalFinal;
                 
             }
                 if(grandTotal.innerText == 0){
                 const blockFormulaire = document.querySelector(".cart__order");
-                blockFormulaire.style.display = "none"
+                blockFormulaire.style.display = "none";
+                localStorage.clear()
                 }
             }
             masqueFormulaire()
-          
+            
         }
         
     } 
+    
 }
 affichagePanier()
 
 ////////////////////////////////////validation du formulaire/////////////////////////////
-let nom = document.getElementById("firstName");
-let alertNom = document.getElementById("firstNameErrorMsg");
 
-let prenom = document.getElementById("lastName");
-let alertPrenom = document.getElementById("lastNameErrorMsg");
+let prenom = document.getElementById("firstName");
+let alertPrenom = document.getElementById("firstNameErrorMsg");
+
+let nom = document.getElementById("lastName");
+let alertNom = document.getElementById("lastNameErrorMsg");
 
 let adresse = document.getElementById("address");
 let alertAdresse = document.getElementById("addressErrorMsg");
@@ -280,88 +278,100 @@ let inputNom, inputPrenom, inputAdresse, inputVille, inputEmail;
 ///////////////validation du prénom //////////////////
 
 prenom.addEventListener("input", function(even) {
-    if(even.target.value == 0 || even.target.value.match(/[a-zA-Z-][0-9]/) ||  even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
-        console.log("vide");
-        alertPrenom.innerText = "votre prénom ne peut contenir de chiffres ni de caractères spéciaux";
+    
+    if(even.target.value == 0 ) {
+        
         inputPrenom = null
        
     }
-    if(even.target.value.match(/^[a-z A-Z-]{2,50}$/)) {
-        console.log(even.target.value);
+    if(even.target.value.match(/^[a-zA-Z-éèç ]{3,50}$/)) {
+       // console.log(even.target.value);
         alertPrenom.style.display = "none";
         inputPrenom = even.target.value;
        
-    }else {
-        alertPrenom.innerText = "votre nom ne peut contenir au maximum 50 lettres ";
+    }
+    if(even.target.value.match(/[=+;"'&@#$€*_!ù%<>?)(§0-9]/)){
+        console.log("pas de caractère spéciaux");
+        alertPrenom.style.display = "block";
+        alertPrenom.innerText = "votre prénom ne peut contenir de caractères spéciaux ni de chiffres";
         inputPrenom = null
     }
+   
 })
 
 ///////////////validation du nom //////////////////
 
 nom.addEventListener("input", function(even) {
-    if(even.target.value == 0 || even.target.value.match(/[a-zA-Z-][0-9]/) ||  even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
-        console.log("vide");
-        alertNom.innerText = "votre nom ne peut contenir de chiffres ni de caractères spéciaux";
-       // inputNom = null
+    if(even.target.value == 0 ) {
+        
         inputNom = null
       
     }
-    if(even.target.value.match(/^[a-z A-Z-]{2,50}$/)) {
-        console.log(even.target.value);
+    if(even.target.value.match(/^[a-z A-Z-éèç ]{2,50}$/)) {
         console.log("succès");
+        console.log(even.target.value);
         alertNom.style.display = "none"
        inputNom = even.target.value;
       
        
-    }else {
-        alertNom.innerText = "votre nom ne peut contenir au maximum 50 lettres ";
-        inputNom = null
-        
     }
+    if(even.target.value.match(/[=+;"'&@#$€*_!ù%<>?)(§0-9]/)){
+        console.log("pas de caractère spéciaux");
+        alertNom.style.display = "block";
+        alertNom.innerText = "votre nom ne peut contenir de caractères spéciaux ni de chiffres";
+        inputNom = null
+    }
+   
 })
 
 
 ///////////////validation de l'adresse //////////////////
 
 adresse.addEventListener("input", function(even) {
-    if(even.target.value == 0 || even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
-        console.log("vide");
-        alertAdresse.innerText = "votre adresse ne peut contenir de chiffres ni de caractères spéciaux";
+    if(even.target.value == 0 ) {
+       
         inputAdresse = null
        
     }
-    if(even.target.value.match(/^([0-9 ]){2}([a-zA-Z ]){5,60}$/)) {
-        console.log("succès");
+    if(even.target.value.match(/[=+;"'&@#$€*_!ù%<>?)(§]/)){
+        console.log("pas de caractère spéciaux");
+        alertAdresse.style.display = "block";
+        alertAdresse.innerText = "votre adresse ne peut contenir de caractères spéciaux sauf . , -";
+        inputAdresse = null
+    }
+    if(even.target.value.match(/^([0-9 ]){2}([a-zA-Z-éèàç ]){5,60}$/)) {
+         console.log("succès");
         console.log(even.target.value);
         alertAdresse.style.display = "none";
         inputAdresse = even.target.value;
        
-    }else {
-        alertAdresse.innerText = "votre adresse  peut contenir au maximum 60 lettres ";
-        inputAdresse = null
     }
+   
 })
 
 ///////////////validation de la ville //////////////////
 
 ville.addEventListener("input", function(even) {
-    if(even.target.value.match(/[=+,;:"'&@#$€*_]/)) {
+    if(even.target.value == 0 ) {
+       
+        inputAdresse = null
+       
+    }
+    if(even.target.value.match(/[=+;"'&@#$€*_!ù%<>?)(§0-9]/)) {
         console.log("vide");
+        alertAdresse.style.display = "block";
         alertVille.innerText = "votre ville ne peut contenir de chiffres ni de caractères spéciaux";
         inputVille = null
        
     }
-    if(even.target.value.match(/^[a-zA-Z-]{2,20}$/)) {
-        console.log("succès");
+    if(even.target.value.match(/^[a-zA-Z-éè ]{2,20}$/)) {
+         console.log("succès");
         console.log(even.target.value);
         alertVille.style.display = "none";
         inputVille = even.target.value;
        
-    }else {
-        alertVille.innerText = "votre ville doit contenir au maximum 20 lettres ";
-        inputVille = null
     }
+   
 })
   
 ///////////////validation de l'email //////////////////
@@ -370,8 +380,7 @@ ville.addEventListener("input", function(even) {
 email.addEventListener("input", function(even) {
     
     if(even.target.value == 0 ) {
-        console.log("vide");
-        alertEmail.innerText = "votre email ne peut être vide";
+        
         inputEmail = null
        
     }
@@ -381,58 +390,69 @@ email.addEventListener("input", function(even) {
         alertEmail.style.display = "none";
         inputEmail = even.target.value;
        
-    }else {
-        alertEmail.innerText = "votre mail doit respecter cette norme mail@domaine.com";
-        inputEmail = null
     }
+   
 })
  
 ///////////////////////////envoie formulaire///////////////////////
 formulaire.addEventListener("submit", function(e){
     e.preventDefault();
     console.log("post stoppé")
-    if(inputNom && inputPrenom && inputAdresse && inputVille &&  inputEmail){ //&& inputEmail
+    if( inputPrenom && inputNom && inputAdresse && inputVille &&  inputEmail){ 
         console.log("tout est parfait on peut envoyer le formulaire");
         let commandeFinal = JSON.parse(localStorage.getItem("produit"));
 
-        console.log(commandeFinal)
+       console.log(commandeFinal)
 
-        let tableauProducts = [];
+        let  products = [];
         for(let j = 0; j < commandeFinal.length; j++){
             if(commandeFinal[j].quantity != 0){
-                tableauProducts.push(commandeFinal[j]._id)
+                products.push(commandeFinal[j]._id)
+               // console.log(tableauProducts)
             }
         }
 
-        let contact = {
-            contact : {
-                firstName : inputPrenom,
-                lastName : inputNom,
-                address: inputAdresse,
-                city: inputVille,
-                email : inputEmail
-               //product-ID: tableauProducts
-            },
-            tableauProduits: tableauProducts
+       console.log(products)
+      
+        const contact = {
+            'firstName' : inputPrenom,
+            'lastName' : inputNom,
+            'address' : inputAdresse,
+            'city' : inputVille,
+            'email' : inputEmail
         }
+        console.log(contact);
+        console.log(products)
 
-        console.log(contact)
+        const dataContact = {
+            contact,
+             products
+        }
+       // console.log(dataContact.contact.firstName + " " + "objet")
+
+        console.log(dataContact)
+        
         fetch("http://localhost:3000/api/products/order", {
-            method: "POST",
-            headers: { "Content-Type" : "application/json" },
-            body: JSON.stringify(contact),
+            method : "POST",
+            headers : {"Content-Type": "application/json"},
+            body : JSON.stringify(dataContact),
+           
         })
-        .then(function(res){ res.json() })
-        .then(function(value){
-            let reponse = value
-            console.log("la réponse du serveur")
-            console.log(reponse)
-        });
+        .then( response => response.json() )
+        .then( promise => {
+            console.log(promise.orderId + "mon order id")
+            orderId = promise.orderId 
+            localStorage.setItem("commandes", JSON.stringify(promise));
+            document.location.href = `./confirmation.html?${orderId}`;
+            
+        })
+        
 
     }else{
+       alert("Erreur dans le formulaire veillez corriger")
        
-        console.log("erreur dans les input    veillez corriger le formulaire")
     }
    
     
 })
+
