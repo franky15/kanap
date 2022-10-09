@@ -2,6 +2,8 @@ const idLien = window.location.search.split("?").join("");
 let id = idLien;
 let val = 0;
 
+let objectFinal = JSON.parse(localStorage.getItem("produit"));
+
 const requeteListProducts =  fetch(`http://localhost:3000/api/products/${id}`);
 
 //Affichage fiche produit
@@ -37,6 +39,7 @@ function ficheProduit() {
 
         //Affichage de la couleur du produit
         const colors = document.getElementById("colors");
+
         const listColors = value.colors;
         for (let i = 0; i < listColors.length; i++) {
             const option1 = document.createElement("option");
@@ -44,8 +47,9 @@ function ficheProduit() {
             option1.innerText = listColors[i];
             colorsPanier = colors.appendChild(option1);
             
+           
         };
-       
+        
         ajouterPanier();   
         
     })
@@ -58,7 +62,10 @@ ficheProduit();
 
 function ajouterPanier() {
     
+
     let select = document.getElementById("colors");
+
+    console.log( select.innerText + " " + "je suis nouveau")
 
     let inputNumber = document.getElementById("quantity");
     
@@ -67,18 +74,13 @@ function ajouterPanier() {
     btnPanier.classList.add("addToCart");
    
     btnPanier.addEventListener("click", function() {
-           
+        
+        
         if(inputNumber.value == 0 || inputNumber.value >= 100){
             
             alert("la quantité doit être comprise entre 1 et 100")
            
         }else{
-
-            const divAjoutPanier = document.querySelector(".item__content__addButton");
-            const form = document.createElement("form");
-            form.appendChild(btnPanier);
-            form.action = "./cart.html";
-            divAjoutPanier.appendChild(form);
 
             let objectFinal = JSON.parse(localStorage.getItem("produit"));
             
@@ -91,68 +93,83 @@ function ajouterPanier() {
 
             );
 
+            /////////////////////////////////
+
             if (objectFinal == null) {
 
                 btnPanier.style.display = "display"
 
                 objectFinal = [];
                 objectFinal.push(fusionObjet);
-                localStorage.setItem("produit", JSON.stringify(objectFinal));
-                
+
+                //vérification de la couleur
+                if(fusionObjet.couleur == ""){
+                    alert("veiller choisir une couleur")
+                }else {
+                    const divAjoutPanier = document.querySelector(".item__content__addButton");
+                    const form = document.createElement("form");
+                    form.appendChild(btnPanier);
+                    form.action = "./cart.html";
+                    divAjoutPanier.appendChild(form);
+                    localStorage.setItem("produit", JSON.stringify(objectFinal));
+                }
                 
             }else if (objectFinal != null) {
 
-                btnPanier.style.display = "display"
+                //vérification de la couleur
+                if(fusionObjet.couleur == ""){
+                    alert("veiller choisir une couleur")
+                }else {
+                    const divAjoutPanier = document.querySelector(".item__content__addButton");
+                    const form = document.createElement("form");
+                    form.appendChild(btnPanier);
+                    form.action = "./cart.html";
+                    divAjoutPanier.appendChild(form);
+                    localStorage.setItem("produit", JSON.stringify(objectFinal));
 
-                for (i = 0; i < objectFinal.length; i++) {
+                    btnPanier.style.display = "display"
 
-                    if ( objectFinal[i]._id == produitPanier._id && 
-                        objectFinal[i].couleur == select.value  ) {
-                        
-                        //////////////////////////////////////
+                    for (i = 0; i < objectFinal.length; i++) {
+
+                        if ( objectFinal[i]._id == produitPanier._id && 
+                            objectFinal[i].couleur == select.value  ) {
+                            
                             let newQuantity = parseInt(objectFinal[i].quantity) + parseInt(inputNumber.value);
-                            //let newPrice = parseInt(produitPanier.price) *  newQuantity;
-                           
-                            console.log("nouvelle quantité est")
-                             console.log(newQuantity)
-                    /////////////////////////////////////
-                        return (
-                        
-                            objectFinal[i].quantity = newQuantity,
-                            //objectFinal[i].price = newPrice,
-                            console.log(objectFinal[i].quantity),
-                            localStorage.setItem("produit", JSON.stringify(objectFinal)),
-                            objectFinal = JSON.parse(localStorage.getItem("produit"))
-                        
-                        )
+                            return (
+                            
+                                objectFinal[i].quantity = newQuantity,
+                                //objectFinal[i].price = newPrice,
+                                console.log(objectFinal[i].quantity),
+                                localStorage.setItem("produit", JSON.stringify(objectFinal)),
+                                objectFinal = JSON.parse(localStorage.getItem("produit"))
+                            
+                            )
+                        }
+                    }
+                    for (let i = 0; i < objectFinal.length; i++) {
+                        if ( (objectFinal[i]._id == produitPanier._id &&
+                            objectFinal[i].couleur != select.value) ||
+                            (objectFinal[i]._id != produitPanier._id) ) {
+                                console.log("test dernier");
+                            return ( 
+                                console.log("test produit différent"),
+                                objectFinal.push(fusionObjet),
+                                localStorage.setItem("produit", JSON.stringify(objectFinal)),
+                                objectFinal = JSON.parse(localStorage.getItem("produit"))
+                                
+                            )  
+                                
+                        }
+
                     }
                 }
-                for (let i = 0; i < objectFinal.length; i++) {
-                    if ( (objectFinal[i]._id == produitPanier._id &&
-                        objectFinal[i].couleur != select.value) ||
-                        (objectFinal[i]._id != produitPanier._id) ) {
-                            console.log("test dernier");
-                        return ( 
-                            console.log("test produit différent"),
-                            objectFinal.push(fusionObjet),
-                            localStorage.setItem("produit", JSON.stringify(objectFinal)),
-                            objectFinal = JSON.parse(localStorage.getItem("produit"))
-                            
-                        )
-                            
-                            
-                    }
-
-                }
-
                 
             }
+            
        
-       
-        }   
+        }  
     
-    })
-        
+    }) 
 
 }; 
 

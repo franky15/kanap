@@ -463,14 +463,14 @@ const requeteListProductsPrice =  fetch("http://localhost:3000/api/products")
             inputAdresse = null
             
         }
-        if(even.target.value.match(/[=+;"'&@#$€*_!ù%<>?)(§0-9]/)) {
+        if(even.target.value.match(/[=+;"'&@#$€*_!ù%<>?)(§]/)) {
             console.log("vide");
-            alertAdresse.style.display = "block";
+            alertVille.style.display = "block";
             alertVille.innerText = "votre ville ne peut contenir de chiffres ni de caractères spéciaux";
             inputVille = null
             
         }
-        if(even.target.value.match(/^[a-zA-Z-éè ]{2,20}$/)) {
+        if(even.target.value.match(/^[a-zA-Z-éè0-9 ]{2,20}$/)) {
                 console.log("succès");
             console.log(even.target.value);
             alertVille.style.display = "none";
