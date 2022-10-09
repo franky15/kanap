@@ -10,9 +10,7 @@ function affichageProduits() {
             return res.json();
         }
     })
-    .then(function(value) {
-        //Récupération des différents critères des objets de la liste et affichage//
-        //   de tous les produits de la liste //
+    .then(function(value) {  //affichage de tous les  produits
 
         const listProducts = value;
         for (let i = 0; i < listProducts.length; i++) {

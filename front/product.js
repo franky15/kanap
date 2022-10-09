@@ -13,6 +13,8 @@ function ficheProduit() {
     .then(function(value){
 
         produitPanier = value;
+       /* delete produitPanier.price
+        console.log(produitPanier)*/
         
         //Affichage de l'image du produit
         const imgblock = document.querySelector(".item__img");
@@ -56,7 +58,6 @@ ficheProduit();
 
 function ajouterPanier() {
     
-   
     let select = document.getElementById("colors");
 
     let inputNumber = document.getElementById("quantity");
@@ -80,12 +81,15 @@ function ajouterPanier() {
             divAjoutPanier.appendChild(form);
 
             let objectFinal = JSON.parse(localStorage.getItem("produit"));
+            
+            delete produitPanier.price
+            console.log(produitPanier)
         
             const fusionObjet = Object.assign({}, produitPanier,
                 { couleur : `${select.value}` },
-                { quantity : inputNumber.value }
+                { quantity : inputNumber.value },
+
             );
-            
 
             if (objectFinal == null) {
 
@@ -149,9 +153,6 @@ function ajouterPanier() {
     
     })
         
-   //return objectFinal = JSON.parse(localStorage.getItem("produit"))
-  
-   
 
 }; 
 
