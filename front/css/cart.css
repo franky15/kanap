@@ -121,6 +121,13 @@ h2 {
 	font-size: 15px;
 	margin-left: 8px;
 }
+/*valid moi rajouté*/
+#champsOk {
+	margin: 0;
+	color: greenyellow;
+	font-size: 15px;
+	margin-left: 8px;
+}
 .cart__order__form__submit {
 	display: flex;
 	justify-content: center;

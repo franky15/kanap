@@ -84,7 +84,11 @@ function ajouterPanier() {
 
             let objectFinal = JSON.parse(localStorage.getItem("produit"));
             
-            delete produitPanier.price
+            delete produitPanier.price;
+           /* delete produitPanier.name;
+            delete produitPanier.altTxt;
+            delete produitPanier.description;
+            delete produitPanier.imageUrl;*/
             console.log(produitPanier)
         
             const fusionObjet = Object.assign({}, produitPanier,
@@ -97,7 +101,7 @@ function ajouterPanier() {
 
             if (objectFinal == null) {
 
-                btnPanier.style.display = "display"
+                //btnPanier.style.display = "display"
 
                 objectFinal = [];
                 objectFinal.push(fusionObjet);
@@ -127,7 +131,7 @@ function ajouterPanier() {
                     divAjoutPanier.appendChild(form);
                     localStorage.setItem("produit", JSON.stringify(objectFinal));
 
-                    btnPanier.style.display = "display"
+                   // btnPanier.style.display = "display"
 
                     for (i = 0; i < objectFinal.length; i++) {
 
